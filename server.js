@@ -5,6 +5,12 @@ var nunjucks = require('nunjucks');
 var authRouter = require('./server/auth-routes');
 //var OperationHelper = require('apac').OperationHelper;
 var request = require('request');
+var fs = require('fs');
+
+// Log any unhandled errors
+process.on('uncaughtException', function(err){
+  fs.appendFile(__dirname + '/server/server.log', new Date() + '  |  ' + err + '\n');
+});
 
 var wmAPIKey = "va35uc9pw8cje38csxx7csk8";
 var bbAPIKey = "n34qnnunjqcb9387gthg8625";
