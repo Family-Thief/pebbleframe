@@ -406,14 +406,22 @@ var DisplayBox = React.createClass({
     }
   },
 
+  findRating: function(){
+    $(':radio').change(
+  function(){
+    $('.choice').text( this.value + ' stars' );
+  } 
+  )},
+
   postReview: function() {
   var title = React.findDOMNode(this.refs.title).value.trim();
   var reviewText = React.findDOMNode(this.refs.reviewText).value.trim();
+  var rating = React.findDOMNode(this.refs.rating).value.trim();
+
   var itemUPC = this.state.allReviews.reviewSets[0].upc;
 
   this.setState({itemUPC: itemUPC}, function() {
 
-  //var rating = React.findDOMNode(this.refs.rating).value.trim();
     $.ajax({
      type: 'POST',
      url: '/auth/products/review',
@@ -423,7 +431,7 @@ var DisplayBox = React.createClass({
       review_title: title,
       review_text: reviewText,
       upc: this.state.itemUPC,
-      rating: 1
+      rating: rating
      },
      success: function (data) {
       $('#myModal').modal('hide');
@@ -481,26 +489,12 @@ var DisplayBox = React.createClass({
                     <input type="text" className="form-control" id="inputText" ref="reviewText" placeholder="Write your review here."/>
                   </div>
               </div>
-                <div>
-                  <label for="inputEmail" className="control-label col-xs-2">Rating</label>
-                    <div className="col-xs-10">   
-                      <label className="checkbox-inline">
-                        <input type="checkbox" name="rating1" value="1"/> 1(Poor)
-                      </label>
-                      <label className="checkbox-inline">
-                        <input type="checkbox" name="rating2" value="2"/> 2
-                      </label>
-                      <label className="checkbox-inline">  
-                        <input type="checkbox" name="rating3" value="3"/> 3
-                      </label>
-                      <label className="checkbox-inline">  
-                        <input type="checkbox" name="rating4" value="4"/> 4
-                      </label>
-                      <label className="checkbox-inline">  
-                        <input type="checkbox" name="rating5" value="5"/> 5(Excellent)
-                      </label>
-                    </div>  
-                </div>
+              <div className="form-group">
+                <label for="inputText" className="control-label col-xs-2">Rating</label>
+                  <div className="col-xs-10">
+                    <input type="text" className="form-control" id="inputText" ref="rating" placeholder="1(Poor) - 5(Excellent)"/>
+                  </div>
+              </div>
             </form>
             <div className="modal-footer">
               <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
