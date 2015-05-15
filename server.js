@@ -229,14 +229,15 @@ var itemchimpReviews = function(req, res, next) {
   if (req.body.upc) {
     req.upc = req.body.upc;
   }
-  if (!req.upc) {
+  if (req.upc) {
     return next();
   }
-  new db.Review({upc: req.upc}).fetchAll()
+  db.Review.forge({upc: req.upc}).fetch()
     .then(function(reviews) {
+      console.log(reviews);
       var itemchimpReviewBody = {};
       itemchimpReviewBody.reviews = reviews;
-      itemchimpReviewBody.totalReviews = reviews.length;
+      itemchimpReviewBody.total = reviews.length;
       if (reviews.length > 0) {
         var sumRatings = 0;
         for(i = 0; i < reviews.length; i++) {
@@ -246,7 +247,7 @@ var itemchimpReviews = function(req, res, next) {
       } else {
         itemchimpReviewBody.customerReviewAverage = undefined;
       }
-      req.itemchimpReviews = itemchimpReviewBody;
+      req.itemchimpReviews = JSON.stringify(itemchimpReviewBody);
       next();
     });
   
@@ -264,8 +265,6 @@ app.post('/get-walmart-reviews', [walmartReviews,bestbuyUPCToSku,bestbuyReviews,
     json.customerReviewAverage = req.customerReviewAverage;
     req.bestbuyReviews = JSON.stringify(json);
   }
-  console.log(req.itemchimpReviews);
-  console.log(req.walmartReviews);
   res.send([
     {
       walmartReviews: req.walmartReviews,
@@ -322,8 +321,6 @@ app.post('/get-bestbuy-reviews', [bestbuyReviews,bestbuySkuToUPC,itemchimpReview
     json.customerReviewAverage = req.customerReviewAverage;
     req.bestbuyReviews = JSON.stringify(json);
   }
-  console.log(req.itemchimpReviews);
-  console.log(req.bestbuyReviews);
   res.send([
     {walmartReviews: req.walmartReviews,
       bestbuyReviews: req.bestbuyReviews,
