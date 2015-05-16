@@ -486,16 +486,10 @@ var DisplayBox = React.createClass({
               <div className="form-group">
                 <label for="inputText" className="control-label col-xs-2">Rating</label>
                   <div className="col-xs-10">
-<<<<<<< HEAD
+                  
                     <input type="text" className="form-control" id="inputText" ref="rating" placeholder="1(Poor) - 5(Excellent)"/>
                   </div>
               </div>
-=======
-                    <input type="text" className="form-control" id="inputText" ref="rating" placeholder="1(poor) - 5(excellent)"/>
-                  </div>
-              </div>
-                
->>>>>>> updated rating on review form to post to db
             </form>
             <div className="modal-footer">
               <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
