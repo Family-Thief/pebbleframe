@@ -117,7 +117,7 @@ var DisplayBox = React.createClass({
   // Final handler for reviews request
   // This call is the result of calls bubbling up from the individual review results
   // var "id" may be itemId or SKU
-  handleReviewRequest: function(id, site, name, image, upc) {
+  handleReviewRequest: function(id, site, name, image) {
 
     var queryUrl;
 
@@ -204,7 +204,7 @@ var DisplayBox = React.createClass({
   // or at least has some same property names.
   // This enables the review columns display functions to be more
   // or less agnostic about where the data came from
-  makeReviewSetFromRawData: function(rawObj, site, name, image, upc) {
+  makeReviewSetFromRawData: function(rawObj, site, name, image) {
     var ReviewsFromData;
     var AverageRating;
     var ReviewCount;
