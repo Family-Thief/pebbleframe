@@ -117,7 +117,7 @@ var DisplayBox = React.createClass({
   // Final handler for reviews request
   // This call is the result of calls bubbling up from the individual review results
   // var "id" may be itemId or SKU
-  handleReviewRequest: function(id, site, name, image) {
+  handleReviewRequest: function(id, site, name, image, upc) {
 
     var queryUrl;
 
@@ -192,15 +192,6 @@ var DisplayBox = React.createClass({
         // params are (width, height)
         this.refs.d3chart.startEngine(500, 225, reviewSetsArray);
 
-        if (this.state.bestbuy.results[0]) {
-          var itemUPC = this.state.bestbuy.results[0].upc;
-        } else if (this.state.walmart.results[0]) {
-          var itemUPC = this.state.walmart.results[0].upc;
-        } 
-
-        this.setState({
-          itemUPC: itemUPC
-        });
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(queryUrl, status, err.toString());
@@ -213,7 +204,7 @@ var DisplayBox = React.createClass({
   // or at least has some same property names.
   // This enables the review columns display functions to be more
   // or less agnostic about where the data came from
-  makeReviewSetFromRawData: function(rawObj, site, name, image) {
+  makeReviewSetFromRawData: function(rawObj, site, name, image, upc) {
     var ReviewsFromData;
     var AverageRating;
     var ReviewCount;
@@ -234,7 +225,8 @@ var DisplayBox = React.createClass({
         image: image,
         Reviews: ReviewsFromData,
         AverageRating: AverageRating,
-        ReviewCount: ReviewCount
+        ReviewCount: ReviewCount,
+        upc: rawObj.upc
         });
     } else if (site === 'Best Buy') {
       // array of reviews
@@ -252,7 +244,8 @@ var DisplayBox = React.createClass({
         image: image,
         Reviews: ReviewsFromData,
         AverageRating: AverageRating,
-        ReviewCount: ReviewCount
+        ReviewCount: ReviewCount,
+        upc: rawObj.upc
         });
 
     } else if (site === 'Item Chimp') {
@@ -271,7 +264,8 @@ var DisplayBox = React.createClass({
         image: image,
         Reviews: ReviewsFromData,
         AverageRating: AverageRating,
-        ReviewCount: ReviewCount
+        ReviewCount: ReviewCount,
+        upc: rawObj.upc
         });
     }
   },
@@ -415,6 +409,10 @@ var DisplayBox = React.createClass({
   postReview: function() {
   var title = React.findDOMNode(this.refs.title).value.trim();
   var reviewText = React.findDOMNode(this.refs.reviewText).value.trim();
+  var itemUPC = this.state.allReviews.reviewSets[0].upc;
+
+  this.setState({itemUPC: itemUPC}, function() {
+
   //var rating = React.findDOMNode(this.refs.rating).value.trim();
     $.ajax({
      type: 'POST',
@@ -437,6 +435,7 @@ var DisplayBox = React.createClass({
       console.error(status, err.toString());
      }.bind(this)
 
+    });
 
     });
 
